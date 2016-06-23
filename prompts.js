@@ -4,6 +4,8 @@ module.exports = {
     "* List your existing tasks by saying something like 'what do I have to do?'\n" +
     "* Finish an existing task by saying something like 'remove go to the gym'",
     canceled: 'Sure... No problem.',
+    thanks: 'Merci :-)',
+    apiProblems: "Désolé, j'ai eu des problèmes pour me connecter à mes services d'intelligence... Pouvez vous essayer de rappeler plus tard?",
     misunderstood: 'Désolé, je n\'ai pas compris...',
     saveTaskCreated: "Created a new task called '%(task)s'",
     saveTaskMissing: 'What would you like to name the task?',
