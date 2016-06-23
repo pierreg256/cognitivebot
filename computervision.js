@@ -1,11 +1,11 @@
 var https = require('https')
   ;
 const computerVisionAPI = "api.projectoxford.ai";
-const computerVisionPath = "/vision/v1.0/analyze";
+const computerVisionPath = "/vision/v1.0/analyze?visualFeatures=Categories,Description,Faces";
 const subscriptionKey = process.env.VISION_KEY || "<YOUR_SUBSCRIPTION_KEY>";
 
 module.exports.analyzeImage = function(attachment, session, cb){
-	var imageUrl = attachment.contentUrl;
+	var imageUrl = attachment;
 
 	console.log('fetching info for: ', imageUrl);
 
@@ -33,7 +33,7 @@ module.exports.analyzeImage = function(attachment, session, cb){
 			response+=d;
 		});
 		res.on('end', function(){
-			cb(null, response);
+			cb(null, JSON.parse(response));
 		});
 	});
 	req.write(postData);

@@ -1,6 +1,8 @@
 var builder = require('botbuilder')
   , prompts = require('./prompts.js')
-  , computerVision = require('./computervision.js');
+  , computerVision = require('./computervision.js')
+  , inspect = require('util').inspect
+  ;
 
 
 /** Return a LuisDialog that points at our model and then add intent handlers. */
@@ -11,18 +13,11 @@ module.exports = dialog;
 
 /** Answer users help requests. We can use a DialogAction to send a static message. */
 dialog.onDefault(function(session,args){
+	var imageUrl = session.message.text.match(/https?:\/\/[A-Za-z0-9-%_\/.&?=]+/);
+console.log("imageUrl:", imageUrl);
 	if (session.message.attachments && (session.message.attachments.length>0)) {
 		console.log('Trying ton analyze the image located at: ', session.message.attachments[0].contentUrl);
-		computerVision.analyzeImage(session.message.attachments[0], session, function(err, data){
-			console.log('getting results from computerVision');
-			if (err) {
-				session.send(prompts.apiProblems);
-			} else {
-				session.send(prompts.thanks);
-				console.log(data);
-				session.send(data);
-			}
-		});
+		analyzeImage(session, session.message.attachments[0].contentUrl);
 	} else {
 		session.send(prompts.misunderstood);
 	}
@@ -32,5 +27,45 @@ dialog.onDefault(function(session,args){
 dialog.on('Greet', builder.DialogAction.send(prompts.demandePhoto));
 
 /** Answer users help requests. We can use a DialogAction to send a static message. */
-dialog.on('Help', builder.DialogAction.send(prompts.helpMessage));
+dialog.on('Help', function(session, args){
+	var imageUrl = session.message.text.match(/https?:\/\/[A-Za-z0-9-%_\/.&?=]+/);
+	if (imageUrl) {
+		imageUrl = imageUrl[0].replace(/ /g, '%20');
+		console.log('Trying ton analyze the image located at: ', imageUrl);
+		analyzeImage(session, imageUrl);
+	} else {
+		session.send(prompts.helpMessage)
+	}
 
+	
+});
+
+///////////////////// Dialog general functions ////////////////////////////
+function analyzeImage(session, imageUrl) {
+	computerVision.analyzeImage(imageUrl, session, function(err, data){
+		session.send(prompts.thanks);
+		console.log('getting results from computerVision');
+		if (err) {
+			session.send(prompts.apiProblems);
+		} else {
+			if (session.perUserConversationData === undefined) {
+				session.perUserConversationData = {};
+			}
+			session.perUserConversationData.computerVisionResult = data;
+			console.log(inspect(session.perUserConversationData));
+
+			var faces = session.perUserConversationData.computerVisionResult.faces
+
+			switch(faces.length) {
+				case 0:
+					session.send(prompts.doYouLikeIt)
+					break;
+				case 1:
+					session.send(prompts.areYouTheOne)
+					break;
+				default:
+					session.send(prompts.areYouOneOf)
+			} 
+		}
+	});
+}
