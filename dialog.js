@@ -26,6 +26,32 @@ console.log("imageUrl:", imageUrl);
 /** Answer users help requests. We can use a DialogAction to send a static message. */
 dialog.on('Greet', builder.DialogAction.send(prompts.demandePhoto));
 
+dialog.on('Yes', function(session, args){
+	//session.userData.save('clef', 'valeur');
+	console.log(inspect(session.userData, {depth:5}));
+	if (session.userData && session.userData.computerVisionResult) {
+		var faces = session.userData.computerVisionResult.faces;
+
+		switch (faces.length) {
+			case 0:
+				session.send('Moi aussi :-)');
+				session.send('<AJOUTER UNE DESCRIPTION DE L\'IMAGE>');
+				break;
+			case 1:
+				if (faces[0].Gender == 'Male') {
+					session.send('Etes vous un homme ?')
+				} else {
+					session.send('Etes vous une femme ?')
+				}
+				break;
+			default:
+				session.send('Il y a '+countMales(faces)+' hommes, et '+countFemales(faces)+'femmes sur cette image.');
+		}
+	} else {
+		session.send('Je ne sais pas quoi vous répondre...');
+	}
+});
+
 /** Answer users help requests. We can use a DialogAction to send a static message. */
 dialog.on('Help', function(session, args){
 	var imageUrl = session.message.text.match(/https?:\/\/[A-Za-z0-9-%_\/.&?=]+/);
@@ -48,13 +74,8 @@ function analyzeImage(session, imageUrl) {
 		if (err) {
 			session.send(prompts.apiProblems);
 		} else {
-			if (session.perUserConversationData === undefined) {
-				session.perUserConversationData = {};
-			}
-			session.perUserConversationData.computerVisionResult = data;
-			console.log(inspect(session.perUserConversationData));
-
-			var faces = session.perUserConversationData.computerVisionResult.faces
+			session.userData.computerVisionResult = data;
+			var faces = session.userData.computerVisionResult.faces
 
 			switch(faces.length) {
 				case 0:
@@ -68,4 +89,17 @@ function analyzeImage(session, imageUrl) {
 			} 
 		}
 	});
+}
+
+function countMales(faces) {
+	var result=0
+	faces.forEach(function(face){
+		if (face.gender == 'Male')
+			result++
+	});
+	return result;
+}
+
+function countFemales(faces) {
+	return faces.length - countMales(faces);
 }
