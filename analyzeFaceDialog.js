@@ -67,7 +67,7 @@ dialog.on('No', function(session,args){
 			});
 			if (found) {
 				utils.setValue(session, 'targetAge', foundAge);
-				session.send("OK. So you're "+foundAge+" ?");
+				session.send("OK. So you're "+foundAge+" years old ?");
 			} else {
 				session.send("I'm sorry I wasn't able to guess your age... \nCan you please tell me how old you are ?");
 			}
