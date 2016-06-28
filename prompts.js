@@ -1,15 +1,15 @@
 module.exports = {
-    helpMessage: "Voici ce que je peux faire pour vous:\n\n" +
-    "* Create new tasks by saying something like 'add a new task to go to the gym'\n" +
-    "* List your existing tasks by saying something like 'what do I have to do?'\n" +
-    "* Finish an existing task by saying something like 'remove go to the gym'",
+    helpMessage: "Here's what you can do:\n\n" +
+    "* Ask for these directions by saying 'Help'\n" +
+    "* Send a photo (or the URL of one) to start a conversation with me'\n" +
+    "* Say 'Bye' when you are finished",
     canceled: 'Sure... No problem.',
-    thanks: 'Merci :-)',
-    apiProblems: "Désolé, j'ai eu des problèmes pour me connecter à mes services d'intelligence... Pouvez vous essayer de rappeler plus tard?",
-    misunderstood: 'Désolé, je n\'ai pas compris...',
-    doYouLikeIt:"Aimez vous cette photo?",
-    areYouTheOne:"Etes vous la personne sur cette photo ?",
-    areYouOneOf:"Etes vous l'une des personnes sur cette photo ?",
+    thanks: 'thanks',
+    apiProblems: "Sorry, I had some difficulties connecting to my cognitive services... \nCan you please try again later ?",
+    misunderstood: "I'm sorry, I didn't get the question...",
+    doYouLikeIt:"Do you like this picture ?",
+    areYouTheOne:"Are you the person on this picture ?",
+    areYouOneOf:"Are you in this picture ?",
     saveTaskCreated: "Created a new task called '%(task)s'",
     saveTaskMissing: 'What would you like to name the task?',
     listTaskList: 'Tasks\n%s',
@@ -17,5 +17,5 @@ module.exports = {
     listNoTasks: 'You have no tasks.',
     finishTaskMissing: "Which task would you like to delete?",
     finishTaskDone: "Removed '%(task)s' from your task list.",
-    demandePhoto: "Bonjour! Pouvez-vous entrer l'URL d' une photo de vous ou que vous aimez? ... Merci!"
+    demandePhoto: "Hello ! Can you please send a picture of you ? If you're not OK with a personal picture, I also love landscapes..."
 }
