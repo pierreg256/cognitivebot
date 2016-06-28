@@ -1,6 +1,8 @@
 var restify = require('restify')
   , builder = require('botbuilder')
   , dialog  = require('./dialog.js')
+  , identifyWhoDialog = require('./identifyWhoDialog.js')
+  , analyzeFaceDialog = require('./analyzeFaceDialog.js')
   ;
 
 // Create bot and add dialogs
@@ -10,7 +12,11 @@ var bot = new builder.BotConnectorBot({ appId: process.env.BOT_ID, appSecret: pr
 });
 */
 bot.add('/', dialog)
+bot.add('/identifyWho/', identifyWhoDialog)
+bot.add('/analyzeFace/', analyzeFaceDialog)
 // Setup Restify Server
+
+
 var server = restify.createServer();
 server.post('/api/messages', bot.verifyBotFramework(), bot.listen());
 
