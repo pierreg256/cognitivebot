@@ -4,7 +4,7 @@ module.exports = {
     "* Send a photo (or the URL of one) to start a conversation with me'\n" +
     "* Say 'Bye' when you are finished",
     canceled: 'Sure... No problem.',
-    thanks: 'thanks',
+    thanks: 'Thanks! ',
     apiProblems: "Sorry, I had some difficulties connecting to my cognitive services... \nCan you please try again later ?",
     misunderstood: "I'm sorry, I didn't get the question...",
     doYouLikeIt:"Do you like this picture ?",

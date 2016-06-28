@@ -48,9 +48,10 @@ dialog.on('Yes', function(session, args){
 					session.send('That was a nice picture! Would you like to try another one ? Maybe with some faces ?');
 					utils.clearData(session);
 				} else {
-					session.send('Me too...');
 					if ((desc = utils.getValue(session, "description")) && (desc.captions.length>0))
-						session.send('It makes me think of '+desc.captions[0].text);
+						session.send('Me too... \nIt makes me think of '+desc.captions[0].text);
+					else
+						session.send('Me too...');
 					utils.setValue(session, "targetType", 'Landscape');
 				}
 				break;
@@ -149,7 +150,7 @@ dialog.on('Help', function(session, args){
 function analyzeImage(session, imageUrl) {
 	utils.clearData(session);
 	computerVision.analyzeImage(imageUrl, session, function(err, data){
-		session.send(prompts.thanks);
+		//session.send(prompts.thanks);
 		console.log('getting results from computerVision');
 		if (err) {
 			console.log('error from computerVision api');
@@ -162,13 +163,13 @@ function analyzeImage(session, imageUrl) {
 				utils.setValue(session, 'description', data.description);
 				switch(faces.length) {
 					case 0:
-						session.send(prompts.doYouLikeIt)
+						session.send(prompts.thanks+'\n'+prompts.doYouLikeIt)
 						break;
 					case 1:
-						session.send(prompts.areYouTheOne)
+						session.send(prompts.thanks+'\n'+prompts.areYouTheOne)
 						break;
 					default:
-						session.send(prompts.areYouOneOf)
+						session.send(prompts.thanks+'\n'+prompts.areYouOneOf)
 				} 
 			} else {
 				session.send(prompts.apiProblems);
